@@ -21,10 +21,7 @@ class MainMenu(State):
         super().partial_event_loop(event=event)
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-                state.Blit_Bucket.alter_color("Color Square", color=Color(ri(0,255),ri(0,255),ri(0,255)))
-                state.Blit_Bucket.alter_location("Color Square", location=(ri(0,600),ri(0,320)))
-                new_side_length = ri(15,75)
-                state.Blit_Bucket.alter_surface("Color Square", surface=Surface((new_side_length, new_side_length)))
+                pass
 
 state_manager.Add_State("Base App", MainMenu(STATE=state_manager))
 state_manager.Change_State("Base App")
