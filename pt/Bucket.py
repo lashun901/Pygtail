@@ -16,6 +16,7 @@ class BlitBucket:
         bb.bucket: dict = {}
         bb.bg_color = bg_color
 
+        # Text Bucket Instantiation
         bb.Text_Bucket = TextBucket(bb.canvas)
     
     def _create_image(img, surface: Surface, location: Rect, color: Color = None):
@@ -59,5 +60,7 @@ class BlitBucket:
                 if image.color:
                     image.surface.fill(image.color)
                 bb.canvas.blit(image.surface, image.location)
+        
+        bb.Text_Bucket.update()
         
         flip()
