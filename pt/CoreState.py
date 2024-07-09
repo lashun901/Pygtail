@@ -12,4 +12,4 @@ class State:
         state.IMAGES_LOADED: bool = False # Keeps track of whether or not images have been loaded into the Blit Bucket.
 
     def partial_event_loop(state, event):
-        pass
+        state.Blit_Bucket.partial_event_loop(event)

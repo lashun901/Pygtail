@@ -62,5 +62,8 @@ class BlitBucket:
                 bb.canvas.blit(image.surface, image.location)
         
         bb.Text_Bucket.update()
+    
+    def partial_event_loop(bb, event):
+        bb.Text_Bucket.partial_event_loop(event)
         
         flip()
