@@ -1,4 +1,5 @@
-from pygame import Surface, Rect, Color, font
+from pygame import Surface, Rect, Color, font, KEYDOWN
+from pygame.constants import *
 from pygame.font import Font
 from string import printable
 
@@ -25,38 +26,37 @@ class TextBox:
         return tb.surface.get_height()
 
 class InputBox:
-    def __init__(ib, rect_location: Rect, font_obj: Font) -> None:
+    def __init__(ib, rect_location: Rect, font_obj: Font, text: str = "") -> None:
         ib.active = False
         ib.location = rect_location
         ib.font = font_obj
-        ib.text = ""
+        ib.text = text
         ib.surface = ib.font.render(ib.text, True, Color(255, 255, 255))
+        ib.show = True
+        ib.active = False
     
     def render(ib):
         ib.surface = ib.font.render(ib.text, True, Color(255, 255, 255))
     
-    def partial_event_loop(ib, e):
-        pass # Left Here
-    
-"""
-1.) Code functionality for adding an input box.
-2.) Functionality for updating text inside input box.
-NOTESS:
-    I need to connect the PEL function in ALL Input boxes to the app's main event loop.
-    (Maybe through iterating and checking if the text box is active(?))
-"""
+    def check_keypress(ib, pressed_key):
+        pass
+
+    def partial_event_loop(ib, event):
+        if event.type == KEYDOWN:
+            ib.check_keypress(event.key)
 
 class TextBucket:
     def __init__(tb, canvas: Surface) -> None:
         tb.canvas = canvas
         tb.fonts = {"Consolas": font.SysFont("Consolas", 18)}
         tb.text_boxes = {}
+        tb.input_boxes = {}
 
     def _create_text_box(tb, text: str, location: tuple):
         return TextBox(text, tb.fonts["Consolas"], location)
 
-    def _create_input_box(tb, rect_location: Rect):
-        return InputBox(rect_location)
+    def _create_input_box(tb, rect_location: Rect, font_obj: Font, text: str = ""):
+        return InputBox(rect_location, font_obj, text)
     
     def add_font(tb, font_name: str, point_size: int):
         tb.fonts[font_name] = font.SysFont(font_name, point_size)
@@ -64,6 +64,13 @@ class TextBucket:
     def add(tb, id: str, text: str, location: tuple):
         try:
             tb.text_boxes[id] = tb._create_text_box(text, location)
+        except Exception as E:
+            print(E)
+    
+    def add_input_box(tb, id: str, rect_location: Rect, font_obj: Font = None, text: str = ""):
+        try:
+            if font_obj: tb.input_boxes[id] = tb._create_input_box(rect_location, font_obj, text)
+            else: tb.input_boxes[id] = tb._create_input_box(rect_location, tb.fonts["Consolas"], text)
         except Exception as E:
             print(E)
     
@@ -84,6 +91,14 @@ class TextBucket:
             text_box = tb.text_boxes[key]
             if text_box.show:
                 tb.canvas.blit(text_box.surface, text_box.location)
+        
+        for index, key in enumerate(tb.input_boxes):
+            input_box = tb.input_boxes[key]
+            if input_box.show:
+                tb.canvas.blit(input_box.surface, input_box.location)
     
     def partial_event_loop(tb, event):
-        pass # Left here
+        for index, key in enumerate(tb.text_boxes):
+            text_box: InputBox = tb.text_boxes[key]
+            if text_box.active:
+                text_box.partial_event_loop(event)

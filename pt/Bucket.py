@@ -52,6 +52,12 @@ class BlitBucket:
         except:
             print("Something went wrong. Could Not Change Location.")
     
+    def get_location(tb, id: str):
+        try:
+            return tb.bucket[id].location
+        except Exception as E:
+            print(E)
+    
     def update(bb):
         bb.canvas.fill(bb.bg_color)
         for index, key in enumerate(bb.bucket):
