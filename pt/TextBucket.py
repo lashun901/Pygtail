@@ -25,6 +25,9 @@ class TextBox:
     def get_surface_height(tb) -> int:
         return tb.surface.get_height()
 
+    def partial_event_loop(tb, event):
+        pass
+
 class InputBox:
     def __init__(ib, rect_location: Rect, font_obj: Font, text: str = "") -> None:
         ib.active = False
@@ -37,13 +40,10 @@ class InputBox:
     
     def render(ib):
         ib.surface = ib.font.render(ib.text, True, Color(255, 255, 255))
-    
-    def check_keypress(ib, pressed_key):
-        pass
 
     def partial_event_loop(ib, event):
         if event.type == KEYDOWN:
-            ib.check_keypress(event.key)
+            check_input_box_input(event.key)
 
 class TextBucket:
     def __init__(tb, canvas: Surface) -> None:
